@@ -1,6 +1,7 @@
 import express from "express"
 import helmet from "helmet"
 import { PORT } from "./config/config"
+import connectToDatabase from "./database/db"
 
 const app = express()
 
@@ -17,5 +18,6 @@ app.get('/', (req: express.Request, res: express.Response) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT: 8080`)
+    connectToDatabase()
 })
 
