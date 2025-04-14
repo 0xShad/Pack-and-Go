@@ -9,10 +9,9 @@
     <h2>Tech Stack 💻</h2>
     <ul>
       <li><strong>Frontend:</strong> React.js + TypeScript</li>
-      <li><strong>Backend:</strong> Node.js + Express.js</li>
+      <li><strong>Backend:</strong> Node.js + Express.js + Typescript</li>
       <li><strong>Database:</strong> MongoDB</li>
       <li><strong>Validation:</strong> Zod</li>
-      <li><strong>Other Technologies:</strong> MERN Stack (MongoDB, Express, React, Node.js)</li>
     </ul>
   </section>
 
