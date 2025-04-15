@@ -4,6 +4,7 @@ import { PORT } from "./config/config"
 import connectToDatabase from "./database/db"
 import authRouter from "./routes/auth.routes"
 import errorMiddleware from "./middleware/middleware"
+import tourRouter from "./routes/tour.routes"
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(express.json())
 
 // Routes
 app.use('/auth', authRouter)
+app.use('/tour', tourRouter)
 
 
 // global error middleware
