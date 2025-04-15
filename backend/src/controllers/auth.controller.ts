@@ -5,6 +5,7 @@ import { User } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config";
+import { SignInZodSchema } from "../validators/SignIn.zod";
 
 export const signUp = async (
   req: Request,
@@ -70,4 +71,45 @@ export const signUp = async (
   }
 };
 
-export const signIn = () => {};
+export const signIn = async (req: Request, res: Response, next: NextFunction) => {
+  // fetch email and password
+  // check if the user exist
+  // compare the password to the hashedpassword
+  // validate ? logged ins : error
+  try {
+    const { email, password } = SignInZodSchema.parse(req.body) 
+
+    const user = await User.findOne({email})
+
+    if (!user) {
+      const error = new Error('User not found') as Error & {statusCode?: number}
+      error.statusCode = 404
+      throw error
+    }
+    
+    const userHashedPassword = user.password
+
+    const isPasswordValid = await bcrypt.compare(password, userHashedPassword)
+
+    if (!isPasswordValid) {
+      const error = new Error('Password is incorrect') as Error & {statusCode?: number}
+      error.statusCode = 401
+      throw error
+    }
+
+    const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: "1d"})
+
+    res.status(202).json({
+      success: true,
+      message: 'logged in successful',
+      data: {
+        token,
+        user
+      }
+    })
+
+  } catch (error) {
+    next(error)
+  }
+
+};
