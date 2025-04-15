@@ -3,6 +3,7 @@ import helmet from "helmet"
 import { PORT } from "./config/config"
 import connectToDatabase from "./database/db"
 import authRouter from "./routes/auth.routes"
+import errorMiddleware from "./middleware/middleware"
 
 const app = express()
 
@@ -16,6 +17,8 @@ app.use(express.json())
 app.use('/auth', authRouter)
 
 
+// global error middleware
+app.use(errorMiddleware)
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Welcome to Pack & Go API')
