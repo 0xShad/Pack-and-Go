@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { JWT_SECRET } from "../config/config";
 import jwt from "jsonwebtoken";
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   userId?: string;
 }
 

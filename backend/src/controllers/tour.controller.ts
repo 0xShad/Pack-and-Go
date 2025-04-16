@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
+import { AuthRequest } from "../middleware/auth.middleware";
+import Tour from "../models/tour.model";
 
 
 
-export const getAllTours = (req: Request, res: Response, next: NextFunction) => {
+export const getAllTours = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-
-        res.status(202).json({
-            message: 'Get all tours endpoint'
-        })
-
+        const userId = req.userId
+        const tours = await Tour.findById({user: userId})
+        res.json(tours)
     } catch (error) {
         next(error)
     }
