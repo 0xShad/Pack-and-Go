@@ -1,12 +1,15 @@
-import { Router } from "express"
-import { createTour, getAllTours } from "../controllers/tour.controller"
-import authorize from "../middleware/auth.middleware"
+import { Router } from "express";
+import {
+  createTour,
+  getAllTours,
+  joinTour,
+} from "../controllers/tour.controller";
+import authorize from "../middleware/auth.middleware";
 
+const tourRouter = Router();
 
-const tourRouter = Router()
+tourRouter.get("/", authorize, getAllTours);
+tourRouter.post("/create-tour", authorize, createTour);
+tourRouter.put("/join-tour/:id", authorize, joinTour);
 
-
-tourRouter.get('/',authorize, getAllTours)
-tourRouter.post('/create-tour', authorize, createTour)
-
-export default tourRouter
+export default tourRouter;
