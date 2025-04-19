@@ -93,13 +93,15 @@ export const joinTour = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.userId
-    const user = await User.findById(userId)
-    const TourId = req.params.id
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    const TourId = req.params.id;
     const tour = await Tour.findById(TourId);
 
     if (!user) {
-      const error = new Error("User not found") as Error & { statusCode?: number };
+      const error = new Error("User not found") as Error & {
+        statusCode?: number;
+      };
       error.statusCode = 404;
       throw error;
     }
@@ -142,8 +144,58 @@ export const joinTour = async (
     await tour.save();
     res.status(200).json({
       success: true,
-      message: 'Successfully joined the tour'
-    })
+      message: "Successfully joined the tour",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unJoinATour = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.userId;
+    const TourId = req.params.id;
+
+    const tour = await Tour.findById(TourId);
+    const user = await User.findById(userId);
+
+    if (!tour) {
+      const error = new Error("Tour not found") as Error & {
+        statusCode?: number;
+      };
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (!user) {
+      const error = new Error("User not found") as Error & {
+        statusCode?: number;
+      };
+      error.statusCode = 404;
+      throw error;
+    }
+
+    //check if the user is actually joined to that specific tour
+    if (!tour.Participants.includes(user._id as mongoose.Types.ObjectId)) {
+      res.status(404).json({
+        message: "User does not belong to this tour",
+      });
+      return;
+    }
+
+    (
+      tour.Participants as mongoose.Types.DocumentArray<mongoose.Types.ObjectId>
+    ).pull(user._id);
+    await tour.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Successfully unjoined the tour of ${tour.TourTitle}`,
+    });
   } catch (error) {
     next(error);
   }
