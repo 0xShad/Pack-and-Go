@@ -200,3 +200,30 @@ export const unJoinATour = async (
     next(error);
   }
 };
+
+
+export const deleteAtour = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const TourId = req.params.id
+    const userId = req.userId
+
+    const deleteTour = await Tour.findOneAndDelete({_id: TourId, Organizer: userId})
+
+    if (!deleteTour) {
+      const error = new Error('Tour not found or you are not the organzier of the tour.') as Error & {
+        statusCode?: number
+      }
+      error.statusCode = 401
+      throw error
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Tour successfully deleted.',
+      tour: deleteTour
+    })
+
+  } catch (error) {
+    next(error)
+  }
+}

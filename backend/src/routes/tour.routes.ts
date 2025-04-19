@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createTour,
+  deleteAtour,
   getAllTours,
   joinTour,
   unJoinATour,
@@ -13,5 +14,6 @@ tourRouter.get("/", authorize, getAllTours);
 tourRouter.post("/create-tour", authorize, createTour);
 tourRouter.put("/join-tour/:id", authorize, joinTour);
 tourRouter.put("/unjoin-tour/:id", authorize, unJoinATour);
+tourRouter.delete("/delete-tour/:id", authorize, deleteAtour)
 
 export default tourRouter;
