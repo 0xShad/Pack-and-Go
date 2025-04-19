@@ -11,7 +11,7 @@ export const getAllTours = async (
 ) => {
   try {
     const userId = req.userId;
-    const tours = await Tour.find({ Organizer: userId });
+    const tours = await Tour.find({ $or: [{Organizer: userId}, {Participants: userId} ]  });
 
     if (!tours) {
       res.status(404).json({ message: "No tours found" });
