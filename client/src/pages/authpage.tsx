@@ -1,6 +1,8 @@
 import { LoginForm } from "@/components/login-form"
 import { SignUpForm } from "@/components/signup-form"
 import { useState } from "react"
+import axios from "axios"
+import { toast } from "sonner"
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(false)
@@ -13,6 +15,23 @@ export default function AuthPage() {
 
   const handleSignUp = async(e: React.FormEvent) => {
     e.preventDefault()
+
+    try {
+      const response = await axios.post("http://localhost:8000/auth/sign-up", {
+        username,
+        firstName,
+        lastName,
+        email,
+        password
+      })
+
+      console.log("User signed up successfully:", response.data)
+      toast.success("User created successfully.")
+
+    } catch (error) {
+      console.error(error)
+      toast.error("Error creating user.")
+    }
 
   }
   return (
