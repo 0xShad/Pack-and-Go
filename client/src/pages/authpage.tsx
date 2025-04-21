@@ -16,7 +16,7 @@ export default function AuthPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/auth/sign-up", {
+      await axios.post("http://localhost:8000/auth/sign-up", {
         username,
         firstName,
         lastName,
@@ -24,7 +24,6 @@ export default function AuthPage() {
         password,
       });
 
-      console.log("User signed up successfully:", response.data);
       toast.success("User created successfully.");
     } catch (error) {
       console.error(error);
@@ -32,11 +31,34 @@ export default function AuthPage() {
     }
   };
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:8000/auth/sign-in", {
+        email,
+        password,
+      });
+
+      toast.success("User logged in successfully.");
+    } catch (error) {
+      console.error(error);
+      toast.error("Error logging in the user.");
+    }
+  };
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         {isLogin ? (
-          <LoginForm onSwitch={() => setIsLogin(false)} />
+          <LoginForm
+            onSwitch={() => setIsLogin(false)}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            onSubmit={handleLogin}
+          />
         ) : (
           <SignUpForm
             onSwitch={() => setIsLogin(true)}
