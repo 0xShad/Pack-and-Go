@@ -16,7 +16,7 @@ export default function AuthPage() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/auth/sign-up", {
+      const res = await axios.post("http://localhost:8000/auth/sign-up", {
         username,
         firstName,
         lastName,
@@ -24,7 +24,9 @@ export default function AuthPage() {
         password,
       });
 
-      toast.success("User created successfully.");
+      if (res.data.success) {
+        toast.success("User created successfully.");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error creating user.");
@@ -35,12 +37,14 @@ export default function AuthPage() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8000/auth/sign-in", {
+      const res = await axios.post("http://localhost:8000/auth/sign-in", {
         email,
         password,
       });
 
-      toast.success("User logged in successfully.");
+      if (res.data.success) {
+        toast.success("User logged in successfully.");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error logging in the user.");
