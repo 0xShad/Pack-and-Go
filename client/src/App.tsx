@@ -1,6 +1,7 @@
 import AuthPage from "./pages/authpage";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import Homepage from "./pages/homepage";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +10,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Homepage />,
+    element: (
+      <ProtectedRoute>
+        <Homepage />
+      </ProtectedRoute>
+    )
   },
 ]);
 
