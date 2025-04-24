@@ -24,7 +24,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex gap-10">
-          <HoverCard>
+          <HoverCard openDelay={200} closeDelay={200}>
             <HoverCardTrigger>
             <Search className="text-gray-400 hover:text-black cursor-pointer"/>
             </HoverCardTrigger>
@@ -34,14 +34,14 @@ const Navbar = () => {
               </div>
             </HoverCardContent>
           </HoverCard>
-          <HoverCard>
+          <HoverCard openDelay={200} closeDelay={200}>
             <HoverCardTrigger>
             <CircleUserRound className="text-gray-400 hover:text-black cursor-pointer"/>
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="flex gap-3 flex-col p-2">
                 <Button className="cursor-pointer">Log in</Button>
-                <Button className="cursor-pointer">Sign up</Button>
+                <Button className="cursor-pointer bg-white text-black border-2 hover:bg-black hover:text-white">Sign up</Button>
               </div>
             </HoverCardContent>
           </HoverCard>

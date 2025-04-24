@@ -7,6 +7,9 @@ const Homepage = () => {
       <header>
         <Navbar />
       </header>
+      <section>
+        
+      </section>
     </main>
   )
 }
