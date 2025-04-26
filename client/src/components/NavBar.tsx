@@ -55,7 +55,7 @@ const Navbar = () => {
                 key={link}
                 className={`${
                   link === navState ? "text-black" : "text-gray-400"
-                } cursor-pointer`}
+                } cursor-pointer hover:text-black`}
                 onClick={() => setNavState(link)}
               >
                 {link}
@@ -75,7 +75,7 @@ const Navbar = () => {
                 {currency.map((key) => (
                   <div
                     key={key}
-                    className="flex items-center cursor-pointer"
+                    className="flex items-center cursor-pointer hover:bg-stone-200 px-1 rounded-sm"
                     onClick={() => setPreparedCurrency(key)}
                   >
                     {currencyIcons[key]}
@@ -92,15 +92,21 @@ const Navbar = () => {
             <HoverCardContent>
               <div className="flex gap-3 flex-col p-2">
                 {isAuthenticated ? (
-                  <Button
-                    onClick={() => {
-                      localStorage.removeItem("isAuthenticated"); // Remove from localStorage on logout
-                      setIsAuthenticated(false); // Set state to false
-                      toast.success("Logged out successfully.")
-                    }}
-                  >
-                    Logout
-                  </Button>
+                  <>
+                    <Button className="bg-white border-2 text-black cursor-pointer hover:bg-stone-200">
+                      Create Tour
+                    </Button>
+                    <Button
+                      className="cursor-pointer"
+                      onClick={() => {
+                        localStorage.removeItem("isAuthenticated"); // Remove from localStorage on logout
+                        setIsAuthenticated(false); // Set state to false
+                        toast.success("Logged out successfully.");
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
                 ) : (
                   <>
                     <LoginDialog />

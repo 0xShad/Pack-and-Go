@@ -44,7 +44,7 @@ const SignupDialog = () => {
 
   return (
     <Dialog>
-      <DialogTrigger className="cursor-pointer">Sign up</DialogTrigger>
+      <DialogTrigger className="cursor-pointer border-2 rounded-md hover:bg-stone-200">Sign up</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create an account.</DialogTitle>

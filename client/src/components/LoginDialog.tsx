@@ -31,6 +31,7 @@ const LoginDialog = () => {
         localStorage.setItem("isAuthenticated", "true");
         setIsAuthenticated(true);
         console.log(isAuthenticated);
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
@@ -39,7 +40,7 @@ const LoginDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="cursor-pointer">Login</DialogTrigger>
+      <DialogTrigger className="cursor-pointer bg-black text-white rounded-md">Login</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Login to your account</DialogTitle>
