@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import React from "react";
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
-  onSwitch?: () => void;
   onSubmit?: (e: React.FormEvent) => void;
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +21,6 @@ interface LoginFormProps extends React.ComponentProps<"div"> {
 
 export function LoginForm({
   className,
-  onSwitch,
   onSubmit,
   email,
   setEmail,
@@ -34,7 +32,7 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle></CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
@@ -70,16 +68,6 @@ export function LoginForm({
                   Login
                 </Button>
               </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <button
-                type="button"
-                onClick={onSwitch}
-                className="underline underline-offset-4 cursor-pointer"
-              >
-                Sign up
-              </button>
             </div>
           </form>
         </CardContent>

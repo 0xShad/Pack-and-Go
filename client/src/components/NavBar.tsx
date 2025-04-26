@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   PhilippinePeso,
   DollarSign,
@@ -8,12 +9,16 @@ import {
 import { Separator } from "./ui/separator";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Button } from "./ui/button";
-import React, { useState } from "react";
+import LoginDialog from "./LoginDialog";
+import SignupDialog from "./SignupDialog";
+import { useAuth } from "@/context/auth.context";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [navState, setNavState] = useState("Home");
   const [preparedCurrency, setPreparedCurrency] = useState("PHP");
   const currency: string[] = ["PHP", "USD", "YEN", "INR"];
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   const currencyIcons: Record<string, React.ReactNode> = {
     PHP: <PhilippinePeso className="w-7 h-5 inline mr-2" />,
@@ -23,6 +28,15 @@ const Navbar = () => {
   };
 
   const navLinks = ["Home", "Tours", "About", "Contact"];
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem("isAuthenticated");
+    if (authStatus === "true") {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [setIsAuthenticated]);
 
   return (
     <>
@@ -38,6 +52,7 @@ const Navbar = () => {
           <div className="flex gap-10">
             {navLinks.map((link) => (
               <button
+                key={link}
                 className={`${
                   link === navState ? "text-black" : "text-gray-400"
                 } cursor-pointer`}
@@ -76,10 +91,22 @@ const Navbar = () => {
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="flex gap-3 flex-col p-2">
-                <Button className="cursor-pointer">Log in</Button>
-                <Button className="cursor-pointer bg-white text-black border-2 hover:bg-black hover:text-white">
-                  Sign up
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    onClick={() => {
+                      localStorage.removeItem("isAuthenticated"); // Remove from localStorage on logout
+                      setIsAuthenticated(false); // Set state to false
+                      toast.success("Logged out successfully.")
+                    }}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <>
+                    <LoginDialog />
+                    <SignupDialog />
+                  </>
+                )}
               </div>
             </HoverCardContent>
           </HoverCard>
@@ -89,4 +116,5 @@ const Navbar = () => {
     </>
   );
 };
+
 export default Navbar;

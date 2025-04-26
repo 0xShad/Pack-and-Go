@@ -1,16 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
-
 
 interface SignUpFormProps extends React.ComponentProps<"div"> {
   onSwitch?: () => void;
@@ -27,7 +20,6 @@ interface SignUpFormProps extends React.ComponentProps<"div"> {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
 export function SignUpForm({
   className,
   onSwitch,
@@ -43,22 +35,16 @@ export function SignUpForm({
   password,
   setPassword,
   ...props
-} : SignUpFormProps) {
+}: SignUpFormProps) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle>Create an account</CardTitle>
-          <CardDescription>
-            Fill the form to create your account.
-          </CardDescription>
-        </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="username">Username</Label>
-                <Input 
+                <Input
                   id="username"
                   type="text"
                   required
@@ -66,7 +52,7 @@ export function SignUpForm({
                   onChange={(e) => setUsername(e.target.value)}
                 />
                 <Label htmlFor="firstname">Firstname</Label>
-                <Input 
+                <Input
                   id="firstname"
                   type="text"
                   required
@@ -74,7 +60,7 @@ export function SignUpForm({
                   onChange={(e) => setFirstName(e.target.value)}
                 />
                 <Label htmlFor="lastname">Lastname</Label>
-                <Input 
+                <Input
                   id="lastname"
                   type="text"
                   required
@@ -95,19 +81,19 @@ export function SignUpForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full cursor-pointer">
                   Sign up
                 </Button>
               </div>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <button type="button" onClick={onSwitch} className="underline underline-offset-4 cursor-pointer">
-                Login
-              </button>
             </div>
           </form>
         </CardContent>

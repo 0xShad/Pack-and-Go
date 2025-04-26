@@ -1,48 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
-  logout: () => void;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
-  login: () => {},
-  logout: () => {},
+  setIsAuthenticated: () => {}, // empty function default
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const expiry = localStorage.getItem("tokenExpiry");
-
-    if (token && expiry && new Date().getTime() < Number(expiry)) {
-      setIsAuthenticated(true);
-    } else {
-      localStorage.removeItem("token");
-      localStorage.removeItem("tokenExpiry");
-      setIsAuthenticated(false);
-    }
-  }, []);
-
-  const login = (token: string) => {
-    const expiryTime = new Date().getTime() + 5 * 60 * 60 * 1000;
-    localStorage.setItem("token", token);
-    localStorage.setItem("tokenExpiry", expiryTime.toString());
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("tokenExpiry");
-    setIsAuthenticated(false);
-  };
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
