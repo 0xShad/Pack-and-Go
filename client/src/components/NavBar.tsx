@@ -13,6 +13,7 @@ import LoginDialog from "./LoginDialog";
 import SignupDialog from "./SignupDialog";
 import { useAuth } from "@/context/auth.context";
 import { toast } from "sonner";
+import CreateTourDialog from "./CreateTourDialog";
 
 const Navbar = () => {
   const [navState, setNavState] = useState("Home");
@@ -93,9 +94,7 @@ const Navbar = () => {
               <div className="flex gap-3 flex-col p-2">
                 {isAuthenticated ? (
                   <>
-                    <Button className="bg-white border-2 text-black cursor-pointer hover:bg-stone-200">
-                      Create Tour
-                    </Button>
+                   <CreateTourDialog/>
                     <Button
                       className="cursor-pointer"
                       onClick={() => {
