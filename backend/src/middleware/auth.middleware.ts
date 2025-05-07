@@ -13,7 +13,11 @@ export interface AuthRequest extends Request {
   TourPrice?: number;
 }
 
-const authorize = (req: AuthRequest, res: Response, next: NextFunction) => {
+const authorize = (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -31,10 +35,16 @@ const authorize = (req: AuthRequest, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string };
+    const decoded = jwt.verify(token, JWT_SECRET as string) as {
+      userId: string;
+    };
     req.userId = decoded.userId;
-    next();
-  } catch (error) {}
+    next(); // continue to route handler
+  } catch (error) {
+    console.error("JWT verification failed:", error);
+    res.status(403).json({ message: "Invalid or expired token" });
+    return;
+  }
 };
 
 export default authorize;
