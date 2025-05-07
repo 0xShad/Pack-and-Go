@@ -15,7 +15,7 @@ const LoginDialog = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [open, setOpen] = useState(false);
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { setToken, setIsAuthenticated } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,21 +26,27 @@ const LoginDialog = () => {
         password,
       });
 
-      if (res.data.success) {
+      if (res.data.success && res.data.data.token) {
         toast.success("Logged in successfully.");
+        const token = res.data.data.token;
+
         localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("authToken", token);
+
+        setToken(token);
         setIsAuthenticated(true);
-        console.log(isAuthenticated);
-        window.location.reload();
       }
     } catch (error) {
       console.error(error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="cursor-pointer bg-black text-white rounded-md">Login</DialogTrigger>
+      <DialogTrigger className="cursor-pointer bg-black text-white rounded-md">
+        Login
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Login to your account</DialogTitle>

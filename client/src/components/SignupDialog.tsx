@@ -17,7 +17,7 @@ const SignupDialog = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsAuthenticated } = useAuth();
+  const { setIsAuthenticated, setToken } = useAuth();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,9 +31,14 @@ const SignupDialog = () => {
         password,
       });
 
-      if (res.data.success) {
+      if (res.data.success && res.data.data.token) {
         toast.success("User created successfully.");
+        const token = res.data.data.token;
+
+        localStorage.setItem("authToken", token);
         localStorage.setItem("isAuthenticated", "true");
+
+        setToken(token);
         setIsAuthenticated(true);
       }
     } catch (error) {

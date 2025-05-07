@@ -19,7 +19,7 @@ const Navbar = () => {
   const [navState, setNavState] = useState("Home");
   const [preparedCurrency, setPreparedCurrency] = useState("PHP");
   const currency: string[] = ["PHP", "USD", "YEN", "INR"];
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  const { isAuthenticated, setIsAuthenticated, setToken } = useAuth();
 
   const currencyIcons: Record<string, React.ReactNode> = {
     PHP: <PhilippinePeso className="w-7 h-5 inline mr-2" />,
@@ -94,12 +94,14 @@ const Navbar = () => {
               <div className="flex gap-3 flex-col p-2">
                 {isAuthenticated ? (
                   <>
-                   <CreateTourDialog/>
+                    <CreateTourDialog />
                     <Button
                       className="cursor-pointer"
                       onClick={() => {
                         localStorage.removeItem("isAuthenticated"); // Remove from localStorage on logout
+                        localStorage.removeItem("authToken"); // Remove token from localStorage on logout
                         setIsAuthenticated(false); // Set state to false
+                        setToken(null); // Clear token in context
                         toast.success("Logged out successfully.");
                       }}
                     >
