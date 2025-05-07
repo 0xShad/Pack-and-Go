@@ -7,6 +7,10 @@ export interface ITour {
   TourLocation: string;
   TourDate: Date;
   TourPrice: number;
+  Image: {
+    public_id: string;
+    imgUrl: string;
+  };
   Organizer: Types.ObjectId; // Ref to User
   Participants: Types.ObjectId[]; // Array of User IDs
   isFull?: Boolean;

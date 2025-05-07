@@ -35,6 +35,17 @@ const TourSchema = new mongoose.Schema<TourDocumentModel>({
     min: 0,
   },
 
+  Image: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    imgUrl: {
+      type: String,
+      required: true,
+    },
+  },
+
   Organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

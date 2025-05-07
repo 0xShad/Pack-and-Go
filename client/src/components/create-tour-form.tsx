@@ -12,37 +12,100 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "./ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
+import React from "react";
+import axios from "axios";
+import { useAuth } from "@/context/auth.context";
 
 type CreateTourFormProps = React.HTMLAttributes<HTMLDivElement> & {
   className?: string;
 };
 
+interface TourData {
+  title: string;
+  description: string;
+  participants: number;
+  location: string;
+  price: number;
+  image: string;
+  date: string;
+}
+
 export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
+  const { token } = useAuth();
+
+  const [formData, setFormData] = useState<TourData>({
+    title: "",
+    description: "",
+    location: "",
+    price: 0,
+    participants: 1,
+    image: "",
+    date: "",
+  });
+
   const [preview, setPreview] = useState<string | null>(null);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [participants, setParticipants] = useState<number>();
-  const [location, setLocation] = useState<string>("");
-  const [price, setPrice] = useState<number>();
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "price" || name === "participants" ? Number(value) : value,
+    }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (!file) return;
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result as string;
+      setFormData((prev) => ({
+        ...prev,
+        image: base64Image,
+      }));
+      setPreview(base64Image);
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleCreateTour = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
-    } catch (error) {
+      const response = await axios.post(
+        "http://localhost:8000/tour/create-tour",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success("Tour created successfully!");
+      setFormData({
+        title: "",
+        description: "",
+        location: "",
+        price: 0,
+        participants: 1,
+        image: "",
+        date: "",
+      });
+      setPreview(null);
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "An error occurred while creating the tour."
+      );
       console.error(error);
-      toast.error("Failed to create the tour.");
     }
   };
 
@@ -59,7 +122,7 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="TourTitle">Title</Label>
@@ -67,8 +130,9 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
                   id="TourTitle"
                   type="text"
                   required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-3">
@@ -76,8 +140,9 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
                 <Textarea
                   id="TourDescription"
                   placeholder="Type your tour description here."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={formData.description}
+                  name="description"
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -86,9 +151,10 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
                   <Input
                     id="TourLocation"
                     type="text"
+                    name="location"
                     required
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    value={formData.location}
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
@@ -96,23 +162,38 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
                   <Input
                     id="TourParticipants"
                     type="number"
+                    name="participants"
                     step="1"
                     required
-                    value={participants}
-                    onChange={(e) => setParticipants(Number(e.target.value))}
+                    value={formData.participants}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="TourPrice">Price</Label>
-                <Input
-                  id="TourPrice"
-                  type="number"
-                  step="1"
-                  required
-                  value={price}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-3">
+                  <Label htmlFor="TourPrice">Price</Label>
+                  <Input
+                    id="TourPrice"
+                    type="number"
+                    name="price"
+                    step="1"
+                    required
+                    value={formData.price}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <Label htmlFor="TourDate">Date</Label>
+                  <Input
+                    id="TourDate"
+                    type="date"
+                    required
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               <div className="grid gap-3">
                 <Label htmlFor="TourPhotos">Photos</Label>
@@ -136,8 +217,12 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
               </div>
 
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full cursor-pointer">
-                  Create Tour
+                <Button
+                  type="submit"
+                  className="w-full cursor-pointer"
+                  disabled={loading}
+                >
+                  {loading ? "Creating..." : "Create Tour"}
                 </Button>
               </div>
             </div>

@@ -3,6 +3,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import Tour from "../models/tour.model";
 import { User } from "../models/user.model";
 import mongoose from "mongoose";
+const cloudinary = require('../utils/cloudinary')
 
 export const getAllTours = async (
   req: AuthRequest,
@@ -50,21 +51,24 @@ export const createTour = async (
     }
 
     const {
-      TourTitle,
-      TourDescription,
-      TourDate,
-      TourLocation,
-      TourPax,
-      TourPrice,
+     title, description, location, price, participants, image, date
     } = req.body;
 
+    const result = await cloudinary.uploader.upload(image,{
+      folder: "tourimages"
+    })
+
     const newTour = new Tour({
-      TourTitle,
-      TourDescription,
-      TourDate,
-      TourLocation,
-      TourPax,
-      TourPrice,
+      TourTitle: title,
+      TourDescription: description,
+      TourDate: new Date(date),
+      TourLocation: location,
+      TourPax: participants,
+      TourPrice: price,
+      Image: {
+        public_id: result.public_id,
+        imgUrl: result.secure_url
+      },
       Organizer: organizer,
     });
 
@@ -73,12 +77,16 @@ export const createTour = async (
       success: true,
       message: "Tour created",
       data: {
-        TourTitle,
-        TourDescription,
-        TourDate,
-        TourLocation,
-        TourPax,
-        TourPrice,
+        TourTitle: title,
+        TourDescription: description,
+        TourDate: new Date(date),
+        TourLocation: location,
+        TourPax: participants,
+        TourPrice: price,
+        Image: {
+          public_id: result.public_id,
+          imgUrl: result.secure_url
+        },
         Organizer: organizer,
       },
     });
