@@ -5,7 +5,7 @@ import { User } from "../models/user.model";
 import mongoose from "mongoose";
 const cloudinary = require('../utils/cloudinary')
 
-export const getAllTours = async (
+export const getUserTours = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -24,6 +24,22 @@ export const getAllTours = async (
     next(error);
   }
 };
+
+export const getAllTours = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tours = await Tour.find()
+    if (!tours) {
+      res.status(404).json({ message: "No tours found" });
+      return;
+    }
+
+    res.json(tours)
+
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 export const createTour = async (
   req: AuthRequest,
