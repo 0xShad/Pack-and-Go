@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GlobeIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-interface Tour {
+export interface Tour {
   TourTitle: string;
   TourDescription: string;
   TourPrice: number;
@@ -21,7 +22,7 @@ interface Tour {
 
 const TourCards = () => {
   const [tours, setTours] = useState<Tour[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,7 +51,7 @@ const TourCards = () => {
           <div
             key={index}
             className="max-w-2xs flex flex-col border border-gray-300 rounded-lg cursor-pointer"
-            id={tour._id}
+            onClick={() => navigate(`/tour/${tour._id}`)}
           >
             <img
               src={tour.Image.imgUrl}

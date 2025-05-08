@@ -40,6 +40,30 @@ export const getAllTours = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
+export const getTourById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const TourId = req.params.id 
+    const tour = await Tour.findById(TourId)
+
+    if (!tour) {
+      const error = new Error("Tour not found") as Error & {
+        statusCode?: number;
+      };
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Tour found",
+      data: tour
+    })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 export const createTour = async (
   req: AuthRequest,

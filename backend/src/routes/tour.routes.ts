@@ -3,6 +3,7 @@ import {
   createTour,
   deleteAtour,
   getAllTours,
+  getTourById,
   getUserTours,
   joinTour,
   unJoinATour,
@@ -12,7 +13,8 @@ import authorize from "../middleware/auth.middleware";
 const tourRouter = Router();
 
 tourRouter.get("/get-user-tours", authorize, getUserTours);
-tourRouter.get("/", getAllTours)
+tourRouter.get("/", getAllTours);
+tourRouter.get("/:id", getTourById);
 tourRouter.post("/create-tour", authorize, createTour);
 tourRouter.put("/join-tour/:id", authorize, joinTour);
 tourRouter.put("/unjoin-tour/:id", authorize, unJoinATour);
