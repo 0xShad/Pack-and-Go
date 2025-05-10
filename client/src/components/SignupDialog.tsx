@@ -23,7 +23,7 @@ const SignupDialog = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8000/auth/sign-up", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/sign-up`, {
         username,
         firstName,
         lastName,

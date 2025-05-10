@@ -21,7 +21,7 @@ const LoginDialog = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8000/auth/sign-in", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/sign-in`, {
         email,
         password,
       });

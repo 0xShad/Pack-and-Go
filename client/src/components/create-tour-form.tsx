@@ -79,7 +79,7 @@ export function CreateTourForm({ className, ...props }: CreateTourFormProps) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/tour/create-tour",
+        `${import.meta.env.VITE_BACKEND_URL}/tour/create-tour`,
         formData,
         {
           headers: {
