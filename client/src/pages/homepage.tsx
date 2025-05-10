@@ -8,12 +8,12 @@ const Homepage = () => {
       <header>
         <Navbar />
       </header>
-      <section className="relative h-[35rem]">
+      <section className="relative h-screen md:h-[35rem]">
         <Hero />
       </section>
       <section className="p-4">
-        <h1 className="font-bold text-2xl">Trending Tours</h1>
-        <div className="grid grid-cols-5 gap-4 p-4 w-full">
+        <h1 className="font-bold text-xl md:text-2xl lg:text-3xl">Trending Tours</h1>
+        <div className="grid grid-cols-1 w-full place-items-center p-4 md:grid-cols-3 md:place-items-start">
           <TourCards />
         </div>
       </section>
