@@ -5,6 +5,8 @@ import {
   JapaneseYen,
   IndianRupee,
   CircleUserRound,
+  Menu,
+  X,
 } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
@@ -20,6 +22,7 @@ const Navbar = () => {
   const [preparedCurrency, setPreparedCurrency] = useState("PHP");
   const currency: string[] = ["PHP", "USD", "YEN", "INR"];
   const { isAuthenticated, setIsAuthenticated, setToken } = useAuth();
+  const [open, setOpen] = useState(false);
 
   const currencyIcons: Record<string, React.ReactNode> = {
     PHP: <PhilippinePeso className="w-7 h-5 inline mr-2" />,
@@ -64,10 +67,16 @@ const Navbar = () => {
             ))}
           </div>
         </div>
-        <div className="flex gap-10">
+        <div className="md:hidden">
+          <Menu
+            className="text-gray-400 hover:text-black cursor-pointer"
+            onClick={() => setOpen(!open)}
+          />
+        </div>
+        <div className="gap-10 hidden md:flex">
           <HoverCard openDelay={200} closeDelay={200}>
             <HoverCardTrigger>
-              <div className="text-gray-400 hover:text-black cursor-pointer">
+              <div className="text-gray-400 hover:text-black cursor-pointer hidden md:block">
                 {currencyIcons[preparedCurrency]}
               </div>
             </HoverCardTrigger>
@@ -88,7 +97,7 @@ const Navbar = () => {
           </HoverCard>
           <HoverCard openDelay={200} closeDelay={200}>
             <HoverCardTrigger>
-              <CircleUserRound className="text-gray-400 hover:text-black cursor-pointer" />
+              <CircleUserRound className="text-gray-400 hover:text-black cursor-pointer hidden md:block" />
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="flex gap-3 flex-col p-2">
@@ -118,6 +127,51 @@ const Navbar = () => {
             </HoverCardContent>
           </HoverCard>
         </div>
+
+        { open && (
+          <div className="absolute z-20 bg-white shadow-lg rounded-md px-45 py-10 w-full top-0 h-[80vh]">
+            {/*close button*/}
+            <X className="cursor-pointer absolute right-10" onClick={() => setOpen(!open)}/>
+            <div className="flex flex-col gap-10 p-10">
+              {navLinks.map((link) => (
+                <button
+                  key={link}
+                  className={`text-lg ${
+                    link === navState ? "text-black" : "text-gray-400"
+                  } cursor-pointer hover:text-black`}
+                  onClick={() => {
+                    setNavState(link);
+                    setOpen(false);
+                  }}
+                >
+                  {link}
+                </button>
+              ))}
+              {isAuthenticated ? (
+                  <>
+                    <CreateTourDialog />
+                    <Button
+                      className="cursor-pointer"
+                      onClick={() => {
+                        localStorage.removeItem("isAuthenticated"); // Remove from localStorage on logout
+                        localStorage.removeItem("authToken"); // Remove token from localStorage on logout
+                        setIsAuthenticated(false); // Set state to false
+                        setToken(null); // Clear token in context
+                        toast.success("Logged out successfully.");
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <LoginDialog />
+                    <SignupDialog />
+                  </>
+                )}
+            </div>
+          </div>
+        )}
       </nav>
       <Separator />
     </>
