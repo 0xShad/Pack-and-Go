@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GlobeIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
 
 export interface Tour {
   TourTitle: string;
@@ -22,7 +22,7 @@ export interface Tour {
 
 const TourCards = () => {
   const [tours, setTours] = useState<Tour[]>([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,10 +48,10 @@ const TourCards = () => {
         );
 
         return (
+          <a href={`/tour/${tour._id}`} target="_blank">
           <div
             key={index}
             className="max-w-2xs flex flex-col border border-gray-300 rounded-lg cursor-pointer"
-            onClick={() => navigate(`/tour/${tour._id}`)}
           >
             <img
               src={tour.Image.imgUrl}
@@ -74,6 +74,7 @@ const TourCards = () => {
               per person
             </h2>
           </div>
+          </a>
         );
       })}
     </>
