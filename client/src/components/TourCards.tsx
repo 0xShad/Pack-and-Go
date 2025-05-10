@@ -1,28 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GlobeIcon } from "lucide-react";
+import {Tour} from "@/types/tour";
 
-
-export interface Tour {
-  TourTitle: string;
-  TourDescription: string;
-  TourPrice: number;
-  TourLocation: string;
-  TourDate: string;
-  TourPax: number;
-  Image: {
-    public_id: string;
-    imgUrl: string;
-  };
-  isFull: boolean;
-  _id: string;
-  Organizer: string;
-  Participants: string[];
-}
 
 const TourCards = () => {
   const [tours, setTours] = useState<Tour[]>([]);
-  // const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
